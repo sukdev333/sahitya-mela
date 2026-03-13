@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SAHITYA MELA">
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
+    
+    <!-- Theme and Branding -->
+    <meta name="theme-color" content="#8B0000">
+    
+    <title>Library - SAHITYA MELA</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .sync-status {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #c3e6cb;
+        }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .book-info {
+            padding: 1.5rem;
+        }
+
+        .book-card h3 {
+            color: #8B0000;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .book-card p {
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        .book-card strong {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .book-category {
+            display: inline-block;
+            background: #8B0000;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .btn {
+            background: #8B0000;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #660000;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        .loading i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #8B0000;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            color: #666;
+            grid-column: 1 / -1;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #8B0000;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-right {
+                display: none !important; /* Hides desktop menu */
+            }
+            .hamburger {
+                display: flex !important; /* Shows mobile button */
+            }
+            .logo span {
+                font-size: 1rem !important; /* Keeps text small so it doesn't crash */
+            }
+        }
+
+        /* --- LIBRARY GRID LAYOUT --- */
+        .books-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+            gap: 30px !important;
+            padding: 40px 20px !important;
+        }
+
+        /* --- THE BOOK CARD --- */
+        .book-card {
+            background: #fff !important;
+            border-radius: 12px !important;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08) !important;
+            overflow: hidden !important;
+            transition: transform 0.3s ease !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .book-card:hover {
+            transform: translateY(-5px) !important;
+        }
+
+        .book-cover-wrapper {
+            width: 100% !important;
+            height: 300px !important;
+            background: #fdfdfd !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            padding: 20px !important;
+        }
+
+        .book-cover-wrapper img {
+            max-height: 100% !important;
+            max-width: 100% !important;
+            object-fit: contain !important;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1) !important;
+        }
+
+        .book-details {
+            padding: 20px !important;
+            text-align: center !important;
+        }
+
+        .book-title {
+            color: #333 !important;
+            font-size: 1.25rem !important;
+            font-weight: bold !important;
+            margin-bottom: 8px !important;
+        }
+
+        .book-author {
+            color: #777 !important;
+            font-size: 0.95rem !important;
+            margin-bottom: 20px !important;
+        }
+
+        .read-btn {
+            display: inline-block !important;
+            background: #8B0000 !important;
+            color: white !important;
+            padding: 10px 25px !important;
+            border-radius: 5px !important;
+            text-decoration: none !important;
+            font-weight: bold !important;
+        }
+
+        /* Safety: If the loader takes more than 5 seconds, let me see the site! */
+        #loader-wrapper {
+            transition: opacity 0.5s ease;
+            pointer-events: none; /* This ensures you can click through it if it gets stuck */
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div id="loader-wrapper">
+        <div class="book-loader">
+            <div class="book-page"></div>
+            <div class="book-page"></div>
+            <div class="book-page"></div>
+        </div>
+        <p class="loader-text">সাহিত্য মেলা লোড হচ্ছে...</p>
+    </div>
+
+    <!-- Header -->
+<header class="header">
+    <nav class="navbar">
+        <div class="nav-container" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+            
+            <a href="index.html" class="logo" style="display: flex; align-items: center; text-decoration: none;">
+                <img src="assets/images/logo.png" alt="Logo" style="height: 50px; width: 50px; object-fit: contain;">
+                <span style="margin-left: 15px; font-size: 1.2rem; font-weight: bold; color: #8B0000; white-space: nowrap;">SAHITYA MELA</span>
+            </a>
+
+            <div class="nav-right">
+                <ul class="nav-menu" style="display: flex; list-style: none; gap: 20px; margin: 0; padding: 0;">
+                    <li><a href="index.html" style="text-decoration: none; color: #333;">Home</a></li>
+                    <li><a href="library.html" style="text-decoration: none; color: #8B0000; font-weight: bold;">Library</a></li>
+                    <li><a href="about.html" style="text-decoration: none; color: #333;">About</a></li>
+                    <li><a href="contact.html" style="text-decoration: none; color: #333;">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="hamburger" onclick="toggleMobileMenu()" style="cursor: pointer; display: none; flex-direction: column; gap: 5px;">
+                <span style="width: 25px; height: 3px; background: #333;"></span>
+                <span style="width: 25px; height: 3px; background: #333;"></span>
+                <span style="width: 25px; height: 3px; background: #333;"></span>
+            </div>
+        </div>
+    </nav>
+</header>
+
+    <!-- Books Section -->
+<section class="library-section">
+    <div class="container">
+        <div style="text-align: center; margin: 50px 0;">
+            <h1 style="color: #8B0000; font-size: 2.5rem;">Library</h1>
+            <p style="color: #666;">Discover Bengali literature and cultural treasures</p>
+        </div>
+        
+        <div id="libraryBooksGrid" class="books-grid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </div>
+</section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <img src="assets/images/logo.png" alt="SAHITYA MELA" class="logo-img">
+                        <div class="logo-text">
+                            <h3>SAHITYA MELA</h3>
+                            <p></p>
+                        </div>
+                    </div>
+                    <p>50 Years of Literary Excellence</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="library.html">Library</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Literature</h4>
+                    <ul>
+                        <li><a href="library.html">All Books</a></li>
+                        <li><a href="about.html">Our History</a></li>
+                        <li><a href="contact.html">Submit Writing</a></li>
+                        <li><a href="admin/login.html">Publications</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> sahityamela64@gmail.com</p>
+                        <p><i class="fas fa-phone"></i> 8240531141</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/18Wdg7Qvm7/" target="_blank"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>(All rights reserved by SAHITYA MELA)</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+            authDomain: "sahitya-mela.firebaseapp.com",
+            projectId: "sahitya-mela",
+            storageBucket: "sahitya-mela.firebasestorage.app",
+            messagingSenderId: "283544938564",
+            appId: "1:283544938564:web:b9bba32cca9e52e6aab411",
+            databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const booksRef = ref(database, 'books');
+
+        onValue(booksRef, (snapshot) => {
+            const grid = document.getElementById('libraryBooksGrid');
+            grid.innerHTML = ''; // Clear old data
+            
+            const data = snapshot.val();
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    const book = data[key];
+                    const img = book.cover || (book.photos && book.photos.mainCover) || 'assets/images/default-book.svg';
+                    grid.innerHTML += `
+                        <div class="book-card">
+                            <div class="book-cover-wrapper">
+                                <img src="${img}" alt="${book.title}">
+                            </div>
+                            <div class="book-details">
+                                <h3 class="book-title">${book.title}</h3>
+                                <p class="book-author">By ${book.author}</p>
+                                <a href="book-reader.html?id=${key}" class="read-btn">Read Now</a>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // ADD THIS AT THE BOTTOM OF THE onValue FUNCTION:
+            const loader = document.getElementById('loader-wrapper');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }
+        });
+    </script>
+    <script src="assets/js/language-switcher.js"></script>
+    <script src="assets/js/english-content.js"></script>
+    <script>
+    function toggleMobileMenu() {
+        const menu = document.querySelector('.nav-menu');
+        menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+        menu.style.flexDirection = 'column';
+        menu.style.position = 'absolute';
+        menu.style.top = '70px';
+        menu.style.left = '0';
+        menu.style.width = '100%';
+        menu.style.background = '#fff';
+        menu.style.padding = '20px';
+        menu.style.boxShadow = '0 5px 10px rgba(0,0,0,0.1)';
+    }
+    </script>
+</body>
+</html>

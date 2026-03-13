@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Web App -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SAHITYA MELA">
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
+    
+    <!-- Theme and Branding -->
+    <meta name="theme-color" content="#8B0000">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
+    
+    <title>SAHITYA MELA</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/performance-fix.css">
+    <link rel="stylesheet" href="assets/css/dark-mode.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+    /* --- ULTIMATE BOOK GRID & CARD FIX --- */
+    .books-grid {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+        gap: 30px !important;
+        padding: 20px !important;
+        justify-items: center !important;
+    }
+
+    .book-card {
+        background: #ffffff !important;
+        border-radius: 15px !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+        width: 100% !important;
+        max-width: 320px !important;
+        overflow: hidden !important; /* Keeps everything inside the card */
+        display: flex !important;
+        flex-direction: column !important;
+        text-align: center !important;
+        transition: transform 0.3s ease !important;
+    }
+
+    .book-cover-wrapper {
+        width: 100% !important;
+        height: 280px !important;
+        background: #f9f9f9 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
+    }
+
+    .book-cover-wrapper img {
+        max-height: 100% !important;
+        max-width: 100% !important;
+        object-fit: contain !important;
+        border-radius: 5px !important;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    }
+
+    .book-details {
+        padding: 20px !important;
+        flex-grow: 1 !important;
+    }
+
+    .book-title {
+        font-size: 1.4rem !important;
+        color: #333 !important;
+        margin: 0 0 10px 0 !important;
+        font-weight: 700 !important;
+        /* Line Clamp: Limits title to 2 lines max */
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    .book-author {
+        font-size: 1rem !important;
+        color: #666 !important;
+        margin-bottom: 20px !important;
+        /* Line Clamp: Limits author to 1 line max */
+        display: -webkit-box !important;
+        -webkit-line-clamp: 1 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
+    }
+
+    .read-btn {
+        display: block !important;
+        background: #8B0000 !important;
+        color: white !important;
+        padding: 12px !important;
+        text-decoration: none !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        transition: background 0.3s !important;
+    }
+
+    .read-btn:hover {
+        background: #a00000 !important;
+    }
+
+    /* --- HEADER COLOR THEME --- */
+
+    /* Logo Text Color */
+    .logo-title {
+        color: #8B0000 !important; /* The dark red from your image */
+        font-family: 'Playfair Display', serif; /* Matching your branding */
+    }
+
+    /* Navigation Links */
+    .nav-link {
+        color: #333 !important; /* Default dark grey */
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    /* Active and Hover States */
+    .nav-link.active, 
+    .nav-link:hover {
+        color: #8B0000 !important; /* Red for the active page and hover */
+    }
+
+    /* Dark Mode Moon Icon */
+    #darkModeToggle i {
+        color: #333;
+    }
+
+    [data-theme="dark"] .nav-link {
+        color: #eee !important;
+    }
+
+    [data-theme="dark"] .nav-link.active {
+        color: #ff4d4d !important; /* Brighter red for dark mode visibility */
+    }
+
+    /* --- MOBILE HEADER PERFECT FIT --- */
+    @media (max-width: 768px) {
+        .header {
+            background: white !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            height: 70px !important; 
+        }
+        .nav-container {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: nowrap !important; 
+            height: 70px !important;
+            width: 100% !important;
+            padding: 0 10px !important; /* Tightened the edges to give the text more room */
+            box-sizing: border-box !important;
+        }
+        
+        .logo {
+            display: flex !important;
+            align-items: center !important;
+            text-decoration: none !important;
+            color: #333 !important;
+            margin: 0 !important;
+        }
+        
+        .logo-img {
+            height: 45px !important; /* 45px is the sweet spot for mobile */
+            width: 45px !important;
+            flex-shrink: 0 !important; 
+            margin-right: 8px !important; /* Tightened the gap after the logo */
+            object-fit: contain !important;
+        }
+
+        .logo-text {
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: center !important;
+        }
+
+        .logo-title {
+            font-size: 1.05rem !important;
+            color: #8B0000 !important; /* Keep the red on mobile */
+            white-space: nowrap !important;
+            margin: 0 !important;
+        }
+
+        .hamburger {
+            width: 28px !important; 
+            height: 20px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            flex-shrink: 0 !important; 
+            margin-left: 10px !important; /* Bumper to keep it off the text */
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+        }
+        
+        .hamburger span {
+            display: block !important;
+            height: 3px !important; 
+            width: 100% !important;
+            background-color: #000 !important; 
+            border-radius: 2px !important;
+        }
+        
+        .nav-right {
+            display: none !important; 
+        }
+    }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div id="loader-wrapper">
+        <div class="book-loader">
+            <div class="book-page"></div>
+            <div class="book-page"></div>
+            <div class="book-page"></div>
+        </div>
+        <p class="loader-text">সাহিত্য মেলা লোড হচ্ছে...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="logo">
+                    <img src="assets/images/logo.png" alt="SAHITYA MELA" class="logo-img">
+                    <div class="logo-text">
+                        <span class="logo-title">SAHITYA MELA</span>
+                    </div>
+                </a>
+                <div class="nav-right">
+                    <ul class="nav-menu">
+                        <li><a href="index.html" class="nav-link active">Home</a></li>
+                        <li><a href="about.html" class="nav-link">About Us</a></li>
+                        <li><a href="library.html" class="nav-link">Library</a></li>
+                        <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                    <button class="dark-mode-toggle" id="darkModeToggle" onclick="toggleDarkMode()">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Welcome to SAHITYA MELA</h1>
+                <p class="hero-subtitle">50 Years of Literary Tradition</p>
+                <p class="hero-description">
+                    Our literary journey with poetry and stories
+                </p>
+                <div class="hero-buttons">
+                    <a href="library.html" class="btn btn-primary">View Library</a>
+                    <a href="about.html" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Books Section -->
+    <section class="featured-books">
+        <div class="container">
+            <h2 class="section-title">Featured Books</h2>
+            <div class="books-grid" id="featuredBooks">
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+                <div class="skeleton-card"></div>
+            </div>
+            <div class="text-center">
+                <a href="library.html" class="btn btn-outline">View All Books</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- About Preview Section -->
+    <section class="about-preview">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>SAHITYA MELA History</h2>
+                    <p>
+                        Quarterly literary magazine SAHITYA MELA has crossed its long 50-year literary journey. 
+                        SAHITYA MELA is now proud to be established as an international literary and cultural 
+                        bilingual quarterly magazine.
+                    </p>
+                    <a href="about.html" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <img src="assets/images/logo.png" alt="SAHITYA MELA" class="logo-img">
+                        <div class="logo-text">
+                            <h3>SAHITYA MELA</h3>
+                            <p></p>
+                        </div>
+                    </div>
+                    <p>50 Years of Literary Excellence</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="library.html">Library</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Literature</h4>
+                    <ul>
+                        <li><a href="library.html">All Books</a></li>
+                        <li><a href="about.html">Our History</a></li>
+                        <li><a href="contact.html">Submit Writing</a></li>
+                        <li><a href="admin/login.html">Publications</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact Us</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> sahityamela64@gmail.com</p>
+                        <p><i class="fas fa-phone"></i> 8240531141</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/share/18Wdg7Qvm7/" target="_blank"><i class="fab fa-facebook"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>(All rights reserved by SAHITYA MELA)</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/error-handler.js"></script>
+    <script src="assets/js/performance-optimizer.js"></script>
+    <script src="assets/js/mobile-nav.js"></script>
+    <script src="assets/js/language-switcher.js"></script>
+    <script src="assets/js/english-content.js"></script>
+    <script>
+        // Dark mode functionality
+        function toggleDarkMode() {
+            const body = document.body;
+            const toggle = document.getElementById('darkModeToggle');
+            const icon = toggle.querySelector('i');
+            
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedTheme = localStorage.getItem('theme');
+            const toggle = document.getElementById('darkModeToggle');
+            const icon = toggle.querySelector('i');
+            
+            if (savedTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-sun';
+            }
+        });
+
+        // Mobile hamburger menu
+        document.querySelector('.hamburger').addEventListener('click', () => {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+
+    <!-- Firebase SDK for Featured Books -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+            authDomain: "sahitya-mela.firebaseapp.com",
+            projectId: "sahitya-mela",
+            storageBucket: "sahitya-mela.firebasestorage.app",
+            messagingSenderId: "283544938564",
+            appId: "1:283544938564:web:b9bba32cca9e52e6aab411",
+            databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        
+        // Safety function to kill the loader
+        const hideLoader = () => {
+            const loader = document.getElementById('loader-wrapper');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
+        };
+
+        // SAFETY NET: If the database takes more than 5 seconds, just show the site anyway
+        setTimeout(hideLoader, 5000);
+
+        const featuredQuery = query(ref(database, 'books'), limitToLast(3));
+
+        onValue(featuredQuery, (snapshot) => {
+            const featuredGrid = document.getElementById('featuredBooks');
+            featuredGrid.innerHTML = '';
+            
+            const data = snapshot.val();
+            
+            if (!data) {
+                featuredGrid.innerHTML = '<p class="text-center">New books coming soon!</p>';
+                hideLoader(); // <-- CRITICAL: Hide it even if there is no data
+                return;
+            }
+
+            const booksArray = Object.keys(data).map(key => ({ id: key, ...data[key] })).reverse();
+
+            booksArray.forEach(book => {
+                const readerURL = `book-reader.html?id=${book.id}`;
+                const img = book.cover || (book.photos && book.photos.mainCover) || 'assets/images/default-book.svg';
+
+                featuredGrid.innerHTML += `
+                    <div class="book-card">
+                        <div class="book-cover-wrapper">
+                            <img src="${img}" alt="Book Cover">
+                        </div>
+                        <div class="book-details">
+                            <h3 class="book-title">${book.title}</h3>
+                            <p class="book-author">By ${book.author}</p>
+                            <a href="${readerURL}" class="read-btn">Read Now</a>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            hideLoader(); // <-- Hide it when books are finished loading
+        }, (error) => {
+            console.error("Firebase Error:", error);
+            hideLoader(); // <-- Hide it if there's an error so the user isn't stuck
+        });
+    </script>
+</body>
+</html>

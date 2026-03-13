@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SAHITYA MELA</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f5f5f5; }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #8B0000; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-right: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div class="loader"></div>
+    <p>Loading Admin Panel...</p>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+            authDomain: "sahitya-mela.firebaseapp.com",
+            projectId: "sahitya-mela",
+            storageBucket: "sahitya-mela.firebasestorage.app",
+            messagingSenderId: "283544938564",
+            appId: "1:283544938564:web:b9bba32cca9e52e6aab411",
+            databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check Firebase Authentication state
+            onAuthStateChanged(auth, (user) => {
+                setTimeout(function() {
+                    if (user) {
+                        // If logged in, go straight to Dashboard
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        // If not logged in, go to Login
+                        window.location.href = 'login.html';
+                    }
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

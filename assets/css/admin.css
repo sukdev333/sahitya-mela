@@ -1,0 +1,212 @@
+/* --- Global Admin Variables --- */
+:root {
+    --admin-sidebar-width: 260px;
+    --admin-header-height: 70px;
+}
+
+.admin-body {
+    background: var(--light-gray);
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- Fixed Header --- */
+.admin-header {
+    background: var(--white);
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 3000; /* Stays above everything */
+    height: var(--admin-header-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.admin-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-header .logo-img {
+    width: 40px;
+    height: 40px;
+}
+
+.admin-header .admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-header .admin-profile span {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.admin-header .admin-profile strong {
+    color: var(--primary-color);
+}
+
+.admin-header .logout-btn {
+    padding: 8px 16px;
+    background: var(--danger-color, #dc3545);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.admin-header .logout-btn:hover {
+    background: var(--danger-color-hover, #c82333);
+}
+
+/* --- Sidebar Admin Profile --- */
+.admin-sidebar .admin-profile {
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-sidebar .admin-profile span {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 14px;
+    text-align: center;
+}
+
+.admin-sidebar .admin-profile strong {
+    color: var(--primary-color);
+}
+
+.admin-sidebar .logout-btn {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--danger-color, #dc3545);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+}
+
+.admin-sidebar .logout-btn:hover {
+    background: var(--danger-color-hover, #c82333);
+}
+
+/* --- Fixed Sidebar --- */
+.admin-sidebar {
+    width: var(--admin-sidebar-width);
+    background: var(--white);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    position: fixed;
+    top: var(--admin-header-height);
+    bottom: 0;
+    left: 0;
+    z-index: 2000;
+    transition: transform 0.3s ease;
+    border-right: 1px solid var(--border-color);
+    overflow-y: auto;
+}
+
+.admin-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.admin-menu a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-menu a.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* --- Main Content Area --- */
+.admin-main {
+    flex: 1;
+    margin-top: var(--admin-header-height);
+    margin-left: var(--admin-sidebar-width); /* Beside sidebar on desktop */
+    padding: 2rem;
+    background: var(--light-gray);
+    transition: all 0.3s ease;
+}
+
+/* --- Stats & Dashboard Cards --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* --- Mobile Specific Fixes --- */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex !important; /* Force show the Hamburger */
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .admin-sidebar {
+        transform: translateX(-100%); /* Hide sidebar off-screen */
+        width: 280px; /* Slightly wider on mobile */
+    }
+
+    .admin-sidebar.active {
+        transform: translateX(0); /* Slide in when JS adds 'active' */
+    }
+
+    .admin-main {
+        margin-left: 0; /* Content takes full width on mobile */
+        padding: 1rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr; /* Stack stats on phones */
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "rules": {
+    "messages": {
+      ".read": "auth != null && auth.uid === 'HoH4ANKuG8T9o3053TPRzQhecYs2'",
+      ".write": true
+    },
+    "books": {
+      ".read": true,
+      ".write": "auth != null && auth.uid === 'HoH4ANKuG8T9o3053TPRzQhecYs2'"
+    }
+  }
+}

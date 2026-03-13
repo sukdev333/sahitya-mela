@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Maintenance - SAHITYA MELA</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <style>
+        .maint-container { max-width: 600px; margin: 100px auto; padding: 30px; background: white; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; }
+        .maint-btn { display: block; width: 100%; margin: 15px 0; padding: 15px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-clear { background: #ffc107; color: #000; }
+        .btn-db { background: #8B0000; color: #fff; }
+    </style>
+</head>
+<body class="admin-body">
+    <div class="maint-container">
+        <h1>Admin Maintenance</h1>
+        <p>Use these tools to keep your dashboard fast and synced.</p>
+        
+        <button class="maint-btn btn-clear" onclick="clearLocalCache()">
+            🧹 Clear Local Cache & Logout
+        </button>
+        <p><small>Fixes layout glitches and "stuck" Dark Mode issues.</small></p>
+
+        <button class="maint-btn btn-db" onclick="rebuildStats()">
+            📊 Refresh Database Stats
+        </button>
+        <p><small>Recalculates book counts if the dashboard shows "0".</small></p>
+        
+        <a href="dashboard.html" style="display:inline-block; margin-top: 20px;">Back to Dashboard</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+            authDomain: "sahitya-mela.firebaseapp.com",
+            projectId: "sahitya-mela",
+            databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // 1. Clear Local Storage (Browser Maintenance)
+        window.clearLocalCache = () => {
+            if(confirm("This will log you out and reset your theme to light. Continue?")) {
+                localStorage.clear();
+                sessionStorage.clear();
+                alert("Cache cleared! Redirecting to login...");
+                window.location.href = "login.html";
+            }
+        };
+
+        // 2. Database Health Check
+        window.rebuildStats = async () => {
+            try {
+                const snapshot = await get(ref(database, 'books'));
+                const count = snapshot.exists() ? Object.keys(snapshot.val()).length : 0;
+                alert(`Database check complete!\nBooks found: ${count}\nConnection: Healthy ✅`);
+            } catch (error) {
+                alert("Error connecting to Firebase: " + error.message);
+            }
+        };
+    </script>
+</body>
+</html>

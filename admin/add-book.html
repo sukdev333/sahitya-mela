@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Check for saved theme immediately before the page renders
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+    <title>Add Book - SAHITYA MELA Admin</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/admin-auth.js"></script>
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/admin-responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Production optimizations */
+        body {
+            margin: 0 !important;
+            padding: 50px 20px 20px 20px !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+            background: #f5f5f5;
+            min-height: 100vh;
+            overflow-x: hidden;
+            word-wrap: break-word;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            font-smooth: always;
+        }
+        
+        /* Base mobile optimizations */
+        * {
+            box-sizing: border-box;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: #8B0000;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 5px;
+        }
+        
+        .mobile-menu-toggle:hover {
+            background: #660000;
+        }
+        
+        .admin-header {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 50px !important;
+            background: white !important;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+            z-index: 999 !important;
+            padding: 0 20px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+        }
+        
+        .admin-sidebar {
+            position: fixed !important;
+            top: 50px !important;
+            left: -280px !important;
+            width: 280px !important;
+            height: calc(100vh - 50px) !important;
+            background: white !important;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1) !important;
+            z-index: 9999 !important;
+            overflow-y: auto !important;
+            border-right: 3px solid #8B0000 !important;
+            transition: left 0.3s ease !important;
+        }
+        
+        .admin-sidebar.active {
+            left: 0 !important;
+        }
+        
+        /* Desktop sidebar - always visible */
+        @media (min-width: 769px) {
+            .admin-sidebar {
+                left: 0 !important;
+            }
+        }
+        
+        /* Ensure sidebar is hidden on mobile by default */
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                left: -280px !important;
+                transform: translateX(0) !important;
+            }
+            
+            .admin-sidebar.active {
+                left: 0 !important;
+                transform: translateX(0) !important;
+            }
+        }
+        
+        .mobile-backdrop {
+            display: none !important;
+        }
+        
+        .mobile-backdrop.active {
+            display: none !important;
+        }
+        
+        /* ========================================
+   COMPREHENSIVE ADD BOOK MOBILE RESPONSIVE DESIGN
+   ======================================== */
+
+/* Base Mobile Styles */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        left: -280px !important;
+        transition: left 0.3s ease !important;
+    }
+    
+    .admin-sidebar.active {
+        left: 0 !important;
+    }
+    
+    .admin-main {
+        margin-left: 0 !important;
+        padding: 15px 10px !important;
+    }
+    
+    .mobile-menu-toggle {
+        display: block !important;
+    }
+    
+    body {
+        padding: 50px 10px 20px 10px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .admin-header {
+        padding: 0 10px !important;
+    }
+    
+    .add-book-container {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    .page-header {
+        padding: 20px 15px !important;
+        margin-bottom: 20px !important;
+        text-align: center;
+    }
+    
+    .page-header h1 {
+        font-size: 20px !important;
+        margin-bottom: 8px !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .page-header p {
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-container {
+        padding: 20px 15px !important;
+        border-radius: 8px !important;
+    }
+    
+    .form-group {
+        margin-bottom: 20px !important;
+    }
+    
+    .form-group label {
+        font-size: 14px !important;
+        margin-bottom: 6px !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 12px !important;
+        font-size: 16px !important;
+        border-radius: 6px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .form-group textarea {
+        min-height: 100px !important;
+    }
+    
+    .form-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-top: 20px !important;
+    }
+    
+    .btn {
+        padding: 12px 20px !important;
+        font-size: 16px !important;
+        width: 100% !important;
+        border-radius: 6px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .photo-upload {
+        padding: 20px !important;
+        border-radius: 6px !important;
+    }
+    
+    .photo-upload h3 {
+        font-size: 16px !important;
+        margin-bottom: 10px !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .photo-upload p {
+        font-size: 13px !important;
+        margin-bottom: 15px !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .upload-btn {
+        padding: 10px 20px !important;
+        font-size: 14px !important;
+        border-radius: 6px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+}
+
+/* Small Tablets (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    body {
+        padding: 50px 15px 20px 15px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .admin-header {
+        padding: 0 15px !important;
+    }
+    
+    .page-header {
+        padding: 25px 20px !important;
+        margin-bottom: 25px !important;
+    }
+    
+    .page-header h1 {
+        font-size: 22px !important;
+        margin-bottom: 10px !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .page-header p {
+        font-size: 14px !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-container {
+        padding: 25px 20px !important;
+    }
+    
+    .form-group {
+        margin-bottom: 22px !important;
+    }
+    
+    .form-group label {
+        font-size: 15px !important;
+        margin-bottom: 8px !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 13px !important;
+        font-size: 16px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .form-group textarea {
+        min-height: 110px !important;
+    }
+    
+    .form-actions {
+        flex-direction: row !important;
+        gap: 12px !important;
+        margin-top: 25px !important;
+    }
+    
+    .btn {
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+        width: auto !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .photo-upload {
+        padding: 25px !important;
+    }
+    
+    .photo-upload h3 {
+        font-size: 18px !important;
+        margin-bottom: 12px !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .photo-upload p {
+        font-size: 14px !important;
+        margin-bottom: 18px !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .upload-btn {
+        padding: 12px 24px !important;
+        font-size: 15px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+}
+
+/* Mobile Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+    body {
+        padding: 50px 12px 20px 12px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .admin-header {
+        padding: 0 12px !important;
+    }
+    
+    .page-header {
+        padding: 18px 15px !important;
+        margin-bottom: 18px !important;
+    }
+    
+    .page-header h1 {
+        font-size: 19px !important;
+        margin-bottom: 8px !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .page-header p {
+        font-size: 13px !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-container {
+        padding: 18px 15px !important;
+    }
+    
+    .form-group {
+        margin-bottom: 18px !important;
+    }
+    
+    .form-group label {
+        font-size: 14px !important;
+        margin-bottom: 6px !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 11px !important;
+        font-size: 15px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .form-group textarea {
+        min-height: 95px !important;
+    }
+    
+    .form-actions {
+        flex-direction: column !important;
+        gap: 8px !important;
+        margin-top: 18px !important;
+    }
+    
+    .btn {
+        padding: 11px 18px !important;
+        font-size: 15px !important;
+        width: 100% !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .photo-upload {
+        padding: 18px !important;
+    }
+    
+    .photo-upload h3 {
+        font-size: 15px !important;
+        margin-bottom: 8px !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .photo-upload p {
+        font-size: 12px !important;
+        margin-bottom: 12px !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .upload-btn {
+        padding: 10px 18px !important;
+        font-size: 13px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+}
+
+/* Small Mobile Phones (320px - 479px) */
+@media (max-width: 479px) {
+    body {
+        padding: 50px 8px 20px 8px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .admin-header {
+        padding: 0 8px !important;
+    }
+    
+    .page-header {
+        padding: 15px 12px !important;
+        margin-bottom: 15px !important;
+    }
+    
+    .page-header h1 {
+        font-size: 18px !important;
+        margin-bottom: 6px !important;
+        line-height: 1.2 !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .page-header p {
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-container {
+        padding: 15px 12px !important;
+        border-radius: 6px !important;
+    }
+    
+    .form-group {
+        margin-bottom: 15px !important;
+    }
+    
+    .form-group label {
+        font-size: 13px !important;
+        margin-bottom: 5px !important;
+        line-height: 1.3 !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px !important;
+        font-size: 14px !important;
+        border-radius: 5px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .form-group textarea {
+        min-height: 80px !important;
+        resize: vertical !important;
+    }
+    
+    .form-actions {
+        flex-direction: column !important;
+        gap: 8px !important;
+        margin-top: 15px !important;
+    }
+    
+    .btn {
+        padding: 10px 16px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        border-radius: 5px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .photo-upload {
+        padding: 15px !important;
+        border-radius: 5px !important;
+    }
+    
+    .photo-upload h3 {
+        font-size: 14px !important;
+        margin-bottom: 6px !important;
+        line-height: 1.3 !important;
+        font-weight: 600 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .photo-upload p {
+        font-size: 11px !important;
+        margin-bottom: 10px !important;
+        line-height: 1.4 !important;
+        font-weight: 400 !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .upload-btn {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+        border-radius: 5px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        font-weight: 500 !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+    
+    .photo-preview {
+        max-width: 150px !important;
+        max-height: 150px !important;
+    }
+    
+    .preview-item {
+        padding: 8px !important;
+        margin: 5px !important;
+        border-radius: 4px !important;
+    }
+    
+    .preview-item img {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .preview-item .file-name {
+        font-size: 10px !important;
+        -webkit-font-smoothing: antialiased !important;
+    }
+    
+    .preview-item .remove-btn {
+        font-size: 10px !important;
+        padding: 4px 8px !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+        -webkit-font-smoothing: antialiased !important;
+        -moz-osx-font-smoothing: grayscale !important;
+        text-rendering: optimizeLegibility !important;
+    }
+}
+        
+        /* Add Book Form Styles */
+        .add-book-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            margin: 0 0 10px 0;
+            color: var(--primary-color);
+        }
+        
+        .page-header p {
+            margin: 0;
+            color: var(--text-light);
+        }
+        
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #660000;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+        
+        .photo-upload {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-upload:hover {
+            border-color: var(--primary-color);
+            background: #f8f9fa;
+        }
+        
+        .photo-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 15px auto;
+            display: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .photo-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .photo-section h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .additional-photos-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .additional-photo-item {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .additional-photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .remove-photo {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .remove-photo:hover {
+            background: rgba(220, 53, 69, 1);
+            transform: scale(1.1);
+        }
+        
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .thumb-wrapper {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .thumb-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .remove-btn-overlay {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4444;
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid white;
+            font-size: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .photo-gallery {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            background: #fff;
+        }
+        
+        .photo-gallery h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .gallery-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .gallery-item.main-cover {
+            border: 3px solid var(--primary-color);
+        }
+        
+        .gallery-item-label {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: var(--primary-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .messages {
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body class="admin-body">
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="admin-nav">
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <img src="../assets/images/logo.png" alt="SAHITYA MELA" class="logo-img">
+                <span>SAHITYA MELA - Admin Panel</span>
+            </div>
+            <div class="admin-profile">
+                <span>Welcome, <strong id="adminUsername">Loading...</strong></span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <nav class="admin-menu">
+                <ul>
+                    <li><a href="#" onclick="history.back()" class="back-option"><i class="fas fa-arrow-left"></i> Back</a></li>
+                    <li><a href="dashboard.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="books.html"><i class="fas fa-book"></i> Manage Books</a></li>
+                    <li><a href="add-book.html" class="active"><i class="fas fa-plus"></i> Add New Book</a></li>
+                    <li><a href="messages.html"><i class="fas fa-envelope"></i> Messages</a></li>
+                    <li><a href="debug-dashboard.html"><i class="fas fa-bug"></i> Debug Logs</a></li>
+                    <li>
+    <a href="/sahitya-mela/index.html" target="_blank" style="display:block; padding:15px 20px; color:#333; text-decoration:none; border-bottom:1px solid #eee;">
+        <i class="fas fa-external-link-alt" style="width:25px;"></i> View Site
+    </a>
+</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Mobile Backdrop -->
+        <div class="mobile-backdrop" id="mobileBackdrop"></div>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="add-book-container">
+                <div class="page-header">
+                    <h1>Add New Book</h1>
+                    <p>Add a new literary work to the SAHITYA MELA collection</p>
+                </div>
+
+                <div class="form-container">
+                    <div id="messages" class="messages"></div>
+                    
+                    <form id="addBookForm">
+                        <div class="form-group">
+                            <label for="bookTitle">Book Title *</label>
+                            <input type="text" id="bookTitle" name="title" placeholder="Enter book title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookAuthor">Author/Editor *</label>
+                            <input type="text" id="bookAuthor" name="author" placeholder="Enter author or editor name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Book Cover Image URL (Optional)</label>
+                            <input type="url" id="bookCoverUrl" placeholder="Paste image link here (e.g. https://site.com/image.jpg)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookCategory">Category (Optional)</label>
+                            <select id="bookCategory" name="category">
+                                <option value="">Select a category</option>
+                                <option value="poetry">Poetry</option>
+                                <option value="novel">Novel</option>
+                                <option value="short-story">Short Story</option>
+                                <option value="essay">Essay</option>
+                                <option value="drama">Drama</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookYear">Publication Year (Optional)</label>
+                            <input type="number" id="bookYear" name="year" placeholder="e.g., 2024" min="1900" max="2030">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookPages">Number of Pages (Optional)</label>
+                            <input type="number" id="bookPages" name="pages" placeholder="e.g., 200" min="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookPrice">Price (Optional)</label>
+                            <input type="number" id="bookPrice" name="price" placeholder="e.g., 250" min="0" step="0.01">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookISBN">ISBN (Optional)</label>
+                            <input type="text" id="bookISBN" name="isbn" placeholder="ISBN number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookLanguage">Language (Optional)</label>
+                            <select id="bookLanguage" name="language">
+                                <option value="">Select a language</option>
+                                <option value="bengali">Bengali</option>
+                                <option value="english">English</option>
+                                <option value="hindi">Hindi</option>
+                                <option value="urdu">Urdu</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookPublisher">Publisher (Optional)</label>
+                            <input type="text" id="bookPublisher" name="publisher" placeholder="Enter publisher name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookDescription">Description (Optional)</label>
+                            <textarea id="bookDescription" name="description" placeholder="Enter book description"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookContent">Content (Optional)</label>
+                            <textarea id="bookContent" name="content" placeholder="Enter book content"></textarea>
+                        </div>
+                        
+                        <div class="form-group" style="background:#f9f9f9; padding: 20px; border-radius: 8px;">
+                            <label style="font-size: 18px; font-weight: bold; margin-bottom:15px; display: block; color: #8B0000;">Book Media & Gallery</label>
+
+                            <div class="photo-section">
+                                <h4>Main Book Cover</h4>
+                                <div id="mainCoverPreviewContainer" style="margin-bottom: 10px;"></div>
+                                <div class="photo-upload" onclick="triggerUpload('main')">
+                                    <i class="fas fa-camera" style="font-size: 30px; margin-bottom: 10px;"></i>
+                                    <p id="mainStatus">Click to Change Main Cover</p>
+                                </div>
+                            </div>
+                            
+                            <div class="photo-section">
+                                <h4>Additional Photos Gallery</h4>
+                                <p style="font-size: 12px; color: #666; margin-bottom: 15px;">You can add multiple images here. They will appear in the book reader gallery.</p>
+                                
+                                <div id="additionalPhotosPreviewContainer" class="photo-grid"></div> 
+
+                                <div class="photo-upload" onclick="triggerUpload('extra')" style="border-style: solid; border-width: 1px; padding: 15px;">
+                                    <i class="fas fa-plus-circle" style="font-size: 24px; margin-bottom: 5px;"></i>
+                                    <p>Add More to Gallery</p>
+                                </div>
+                                
+                                <button type="button" onclick="clearAllGallery()" class="btn-secondary" style="margin-top:15px; background:#666; font-size: 12px; width: auto; padding: 5px 15px;">Clear Entire Gallery</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" onclick="console.log('Submit button clicked')">
+                                <i class="fas fa-save"></i> Add Book
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="assets/js/add-book-fixed.js"></script>
+    <script>
+        // Production-ready functions
+        
+        // Logout function
+        function logout() {
+            localStorage.removeItem('adminSession');
+            sessionStorage.removeItem('adminSession');
+            window.location.href = 'login.html';
+        }
+
+        // Initialize mobile sidebar state
+        function initializeMobileSidebar() {
+            const sidebar = document.getElementById('adminSidebar');
+            
+            if (sidebar) {
+                // Check if we're on mobile
+                if (window.innerWidth <= 768) {
+                    // Ensure sidebar is hidden on mobile
+                    sidebar.classList.remove('active');
+                    console.log('Mobile sidebar initialized: hidden');
+                } else {
+                    // Ensure sidebar is visible on desktop
+                    sidebar.classList.add('active');
+                    console.log('Desktop sidebar initialized: visible');
+                }
+            }
+        }
+
+        // Mobile menu toggle function
+        window.toggleMobileMenu = function() {
+            // This looks for the sidebar we just styled in CSS
+            const sidebar = document.querySelector('.admin-sidebar');
+            sidebar.classList.toggle('active');
+        };
+        
+        // Photo management functions
+        let uploadedPhotos = { 
+            mainCover: "", 
+            gallery: {} // We use an object to store gallery photos by ID
+        };
+
+        // 1. Fill Form when page loads
+        function fillForm(book) {
+            document.getElementById('bookTitle').value = book.title || '';
+            document.getElementById('bookAuthor').value = book.author || '';
+            document.getElementById('bookContent').value = book.content || '';
+            // ... Fill other fields (Year, Category, etc.) ...
+
+            // Load Main Cover
+            if (book.cover) {
+                uploadedPhotos.mainCover = book.cover;
+                renderMainCover();
+            }
+
+            // Load Existing Gallery Photos
+            if (book.photos) {
+                uploadedPhotos.gallery = book.photos;
+                renderGallery();
+            }
+        }
+
+        // 2. Render Functions
+        window.renderMainCover = () => {
+            const container = document.getElementById('mainCoverPreviewContainer');
+            if (uploadedPhotos.mainCover) {
+                container.innerHTML = `<img src="${uploadedPhotos.mainCover}" style="width:120px; border-radius:8px; border:2px solid #8B0000;">`;
+                document.getElementById('mainStatus').innerText = "Cover Loaded (Click to Change)";
+            }
+        };
+
+        window.renderGallery = () => {
+            const container = document.getElementById('additionalPhotosPreviewContainer');
+            container.innerHTML = '';
+            
+            Object.keys(uploadedPhotos.gallery).forEach(id => {
+                const div = document.createElement('div');
+                div.className = 'thumb-wrapper';
+                div.innerHTML = `
+                    <img src="${uploadedPhotos.gallery[id]}">
+                    <div class="remove-btn-overlay" onclick="removeGalleryPhoto('${id}')">
+                        <i class="fas fa-times"></i>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        };
+
+        // 3. Action Functions
+        window.removeGalleryPhoto = (id) => {
+            delete uploadedPhotos.gallery[id];
+            renderGallery();
+        };
+
+        window.clearAllGallery = () => {
+            if(confirm("Are you sure you want to delete all gallery photos?")) {
+                uploadedPhotos.gallery = {};
+                renderGallery();
+            }
+        };
+
+        window.triggerUpload = (type) => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    if (type === 'main') {
+                        uploadedPhotos.mainCover = event.target.result;
+                        renderMainCover();
+                    } else {
+                        const newId = 'img_' + Date.now();
+                        uploadedPhotos.gallery[newId] = event.target.result;
+                        renderGallery();
+                    }
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        };
+
+        document.getElementById('addBookForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // 1. Show loading state on button
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = "Saving to Cloud...";
+            submitBtn.disabled = true;
+
+            try {
+                // 2. Collect Data
+                const bookData = {
+                    title: document.getElementById('bookTitle').value,
+                    author: document.getElementById('bookAuthor').value,
+                    content: document.getElementById('bookContent').value || '',
+                    cover: uploadedPhotos.mainCover,
+                    photos: uploadedPhotos.gallery, // Saves the whole gallery object
+                    timestamp: Date.now()
+                };
+
+                // 3. Push to Firebase
+                const { getDatabase, ref, push, set } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js");
+                const database = getDatabase();
+                const booksRef = ref(database, 'books');
+                const newBookRef = push(booksRef);
+                await set(newBookRef, bookData);
+
+                // 4. Success!
+                alert("✅ Book Added Successfully!");
+                
+                // Use the variable name instead of 'this'
+                document.getElementById('addBookForm').reset(); 
+                
+                // If you have a preview image shown, hide it
+                const preview = document.getElementById('mainCoverPreviewContainer');
+                if(preview) preview.innerHTML = '';
+                
+                // Reset gallery
+                uploadedPhotos.gallery = {};
+                renderGallery();
+
+                window.location.href = "books.html"; // Go to manage books
+
+            } catch (error) {
+                console.error("Error adding book:", error);
+                alert("❌ Error: " + error.message);
+            } finally {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        function showMessage(message, type = 'success') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            messagesDiv.appendChild(messageDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.parentElement.removeChild(messageDiv);
+                }
+            }, 5000);
+        }
+
+        // Reset form function
+        function resetForm() {
+            document.getElementById('addBookForm').reset();
+            document.getElementById('mainCoverPreview').style.display = 'none';
+            document.getElementById('additionalPhotosPreview').innerHTML = '';
+            document.getElementById('additionalPhotos2Preview').innerHTML = '';
+            document.getElementById('additionalPhotos3Preview').innerHTML = '';
+            document.getElementById('photoGallery').style.display = 'none';
+            
+            // Reset uploaded photos
+            uploadedPhotos = {
+                mainCover: null,
+                additional: []
+            };
+            
+            // Clear messages
+            document.getElementById('messages').innerHTML = '';
+            
+            // If in edit mode, redirect to books page instead of resetting
+            const urlParams = new URLSearchParams(window.location.search);
+            const isEditMode = urlParams.get('edit') === 'true';
+            
+            if (isEditMode) {
+                localStorage.removeItem('bookToEdit');
+                localStorage.removeItem('editingBookId');
+                window.location.href = 'books.html';
+            }
+        }
+
+        // Check for edit mode on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeMobileSidebar();
+            checkScreenSize();
+            checkEditMode();
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', checkScreenSize);
+
+        function checkScreenSize() {
+            const sidebar = document.getElementById('adminSidebar');
+            
+            if (window.innerWidth >= 769) {
+                // Desktop: sidebar always visible
+                sidebar.classList.add('active');
+                console.log('Desktop mode: sidebar visible');
+            } else {
+                // Mobile: sidebar hidden by default
+                sidebar.classList.remove('active');
+                console.log('Mobile mode: sidebar hidden');
+            }
+        }
+
+        function checkEditMode() {
+            // Check if we're in edit mode
+            const urlParams = new URLSearchParams(window.location.search);
+            const isEditMode = urlParams.get('edit') === 'true';
+            
+            console.log('URL params:', urlParams.toString());
+            console.log('Edit mode:', isEditMode);
+        
+        if (isEditMode) {
+            console.log('Edit mode detected');
+            
+            // Get book ID from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const bookId = urlParams.get('bookId');
+            console.log('Book ID from URL:', bookId);
+            
+            if (bookId) {
+                // Load full book data from main storage
+                const allBooks = JSON.parse(localStorage.getItem('sahityaMelaUniversalBooks') || '[]');
+                const book = allBooks.find(b => b.id == bookId);
+                console.log('Found book for edit:', book);
+                
+                if (book) {
+                
+                // Update page title and button
+                document.querySelector('h1').innerHTML = '📝 Edit Book';
+                document.querySelector('.btn-primary').innerHTML = '<i class="fas fa-save"></i> Update Book';
+                
+                // Fill form with existing data
+                document.getElementById('bookTitle').value = book.title || '';
+                document.getElementById('bookAuthor').value = book.author || '';
+                document.getElementById('bookCategory').value = book.category || '';
+                document.getElementById('bookYear').value = book.year || '';
+                document.getElementById('bookPages').value = book.pages || '';
+                document.getElementById('bookPrice').value = book.price || '';
+                document.getElementById('bookISBN').value = book.isbn || '';
+                document.getElementById('bookDescription').value = book.description || '';
+                document.getElementById('bookContent').value = book.content || '';
+                
+                // Load photos if they exist
+                if (book.photos) {
+                    // Start with book photos but preserve PDFs from main storage
+                    uploadedPhotos = {
+                        mainCover: book.photos.mainCover,
+                        additional: book.photos.additional || [],
+                        pdfs: [] // Start with empty PDFs, will load from main storage
+                    };
+                }
+                
+                // Show additional photos
+                if (uploadedPhotos.additional && uploadedPhotos.additional.length > 0) {
+                    const previewContainer = document.getElementById('additionalPhotosPreview');
+                    uploadedPhotos.additional.forEach(photo => {
+                        const photoItem = document.createElement('div');
+                        photoItem.className = 'additional-photo-item';
+                        photoItem.id = photo.id;
+                        photoItem.innerHTML = `
+                            <img src="${photo.data}" alt="Additional photo">
+                            <button class="remove-photo" onclick="removeAdditionalPhoto('${photo.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        `;
+                        previewContainer.appendChild(photoItem);
+                    });
+                }
+                
+                // Update gallery
+                updateGallery();
+            }
+            
+            // Store book ID for update
+            uploadedPhotos.bookId = book.id;
+            
+            showMessage('Book loaded for editing. Make your changes and click "Update Book".', 'success');
+        } else {
+            showMessage('No book data found for editing.', 'error');
+        }
+    } else {
+        showMessage('No book ID found for editing.', 'error');
+    }
+}
+    </script>
+
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref as dbRef, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+        authDomain: "sahitya-mela.firebaseapp.com",
+        projectId: "sahitya-mela",
+        storageBucket: "sahitya-mela.firebasestorage.app",
+        messagingSenderId: "283544938564",
+        appId: "1:283544938564:web:b9bba32cca9e52e6aab411",
+        databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const storage = getStorage(app);
+    const auth = getAuth(app);
+
+    // --- AUTHENTICATION GATEKEEPER ---
+    onAuthStateChanged(auth, (user) => {
+        // Verify user is logged in AND matches your specific UID
+        if (user && user.uid === 'HoH4ANKuG8T9o3053TPRzQhecYs2') {
+            console.log("Access Granted: Welcome Sahityamela");
+            
+            // Update the name in the UI if the element exists
+            const nameDisplay = document.getElementById('adminUsername');
+            if (nameDisplay) {
+                nameDisplay.textContent = "Sahityamela";
+            }
+        } else {
+            // Redirect unauthorized users to login
+            window.location.href = "login.html";
+        }
+    });
+
+    // --- GLOBAL LOGOUT FUNCTION ---
+    window.logout = () => {
+        if (confirm("Are you sure you want to logout?")) {
+            signOut(auth).then(() => {
+                localStorage.clear();
+                sessionStorage.clear();
+                window.location.href = "login.html";
+            }).catch((error) => {
+                console.error("Logout Error:", error);
+            });
+        }
+    };
+
+    // --- SUBMIT FORM LOGIC ---
+    const addBookForm = document.getElementById('addBookForm');
+
+    addBookForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Processing...";
+
+        try {
+            // 1. PREPARE FINAL DATA
+            const bookData = {
+                title: document.getElementById('bookTitle').value,
+                author: document.getElementById('bookAuthor').value,
+                cover: (typeof uploadedPhotos !== 'undefined' && uploadedPhotos.mainCover) || '',
+                content: document.getElementById('bookContent').value || '',
+                timestamp: Date.now()
+            };
+
+            // 3. SAVE TO DATABASE
+            const newBookRef = push(dbRef(database, 'books'));
+            await set(newBookRef, bookData);
+
+            alert("✅ Book saved to Cloud!");
+            addBookForm.reset();
+            window.location.href = "books.html";
+
+        } catch (error) {
+            console.error(error);
+            alert("❌ Error: " + error.message);
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Add Book";
+        }
+    });
+    </script>
+
+    <script>
+        // Dark Mode Toggle Function
+        window.toggleDarkMode = function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', targetTheme);
+            localStorage.setItem('theme', targetTheme); // Saves for next visit
+            
+            // Update the icon
+            const icon = document.querySelector('#darkModeToggle i');
+            if (icon) {
+                icon.className = targetTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        };
+    </script>
+</body>
+</html>

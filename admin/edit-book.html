@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+    <title>Edit Book - SAHITYA MELA Admin</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/admin.css">
+    <link rel="stylesheet" href="assets/css/admin-responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body { margin: 0 !important; padding: 50px 20px 20px 20px !important; font-family: -apple-system, sans-serif !important; background: #f5f5f5; min-height: 100vh; }
+        * { box-sizing: border-box; }
+        .mobile-menu-toggle { display: none; background: #8B0000; border: none; color: white; font-size: 18px; cursor: pointer; padding: 8px 12px; border-radius: 5px; margin-right: 15px;}
+        .admin-header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 999; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; }
+        .admin-sidebar { position: fixed; top: 60px; left: -280px; width: 280px; height: calc(100vh - 60px); background: white; box-shadow: 2px 0 10px rgba(0,0,0,0.1); z-index: 9999; overflow-y: auto; border-right: 3px solid #8B0000; transition: left 0.3s ease; }
+        .admin-sidebar.active { left: 0; }
+        @media (min-width: 769px) { .admin-sidebar { left: 0; } .admin-main { margin-left: 280px; padding: 20px; } }
+        @media (max-width: 768px) { .mobile-menu-toggle { display: block; } .admin-main { padding: 15px 10px; } }
+        
+        .add-book-container { max-width: 800px; margin: 0 auto; }
+        .page-header { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center;}
+        .page-header h1 { margin: 0 0 10px 0; color: #8B0000; }
+        .page-header p { margin: 0; color: #666; }
+        
+        /* Thumbnail container styles */
+        .thumb-container { position: relative; display: inline-block; margin: 5px; }
+        .remove-thumb { 
+            position: absolute; top: -5px; right: -5px; 
+            background: #dc3545; color: white; border-radius: 50%; 
+            width: 20px; height: 20px; font-size: 12px; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; border: 2px solid white;
+        }
+        
+        .form-container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #333; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 15px; }
+        .form-group textarea { resize: vertical; min-height: 100px; }
+        
+        .photo-section { margin-bottom: 20px; padding: 20px; border: 1px solid #e9ecef; border-radius: 8px; background: #fdfdfd; }
+        .photo-section h4 { color: #8B0000; margin: 0 0 15px 0; font-size: 16px; }
+        .photo-upload { border: 2px dashed #ccc; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; background: white; }
+        .photo-upload i { color: #ccc; }
+        
+        .form-actions { display: flex; gap: 15px; margin-top: 30px; flex-direction: column; }
+        .btn { padding: 12px 24px; border: none; border-radius: 6px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; }
+
+        /* --- MULTI-PHOTO GRID STYLES --- */
+        #additionalPhotosPreviewContainer {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+            gap: 15px !important;
+            margin-bottom: 20px !important;
+        }
+
+        .photo-slot {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .photo-slot:hover {
+            border-color: #8B0000;
+            background: #fff5f5;
+        }
+
+        .photo-slot i {
+            color: #8B0000;
+            font-size: 24px;
+        }
+
+        .photo-slot span {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .thumb-container img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .btn-primary { background: #8B0000; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        
+        .messages { margin-bottom: 20px; }
+        .message { padding: 15px; border-radius: 8px; margin-bottom: 10px; }
+        .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div style="display:flex; align-items:center;">
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <img src="../assets/images/logo.png" alt="Logo" style="height: 35px; margin-right: 10px;">
+            <strong style="color:#8B0000;">Admin Panel</strong>
+        </div>
+        <button onclick="window.logout()" class="btn-secondary" style="padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none;">Logout</button>
+    </header>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar" id="adminSidebar">
+            <nav class="admin-menu" style="padding: 20px 0;">
+                <ul style="list-style:none; padding:0; margin:0;">
+                    <li><a href="books.html" style="display:block; padding:15px 20px; color:#333; text-decoration:none; border-bottom:1px solid #eee;"><i class="fas fa-arrow-left" style="width:25px;"></i> Back</a></li>
+                    <li><a href="dashboard.html" style="display:block; padding:15px 20px; color:#333; text-decoration:none; border-bottom:1px solid #eee;"><i class="fas fa-tachometer-alt" style="width:25px;"></i> Dashboard</a></li>
+                    <li><a href="books.html" style="display:block; padding:15px 20px; color:#333; text-decoration:none; border-bottom:1px solid #eee;"><i class="fas fa-book" style="width:25px;"></i> Manage Books</a></li>
+                    <li style="background:#fdf1f1; border-left:4px solid #8B0000;"><a href="add-book.html" style="display:block; padding:15px 20px; color:#8B0000; text-decoration:none; border-bottom:1px solid #eee; font-weight:bold;"><i class="fas fa-plus" style="width:25px;"></i> Add New Book</a></li>
+                    <li><a href="messages.html" style="display:block; padding:15px 20px; color:#333; text-decoration:none; border-bottom:1px solid #eee;"><i class="fas fa-envelope" style="width:25px;"></i> Messages</a></li>
+                    <li><a href="debug-dashboard.html" style="display:block; padding:15px 20px; color:#333; text-decoration:none; border-bottom:1px solid #eee;"><i class="fas fa-bug" style="width:25px;"></i> Debug Logs</a></li>
+                    <li>
+    <a href="/sahitya-mela/index.html" target="_blank" style="display:block; padding:15px 20px; color:#333; text-decoration:none; border-bottom:1px solid #eee;">
+        <i class="fas fa-external-link-alt" style="width:25px;"></i> View Site
+    </a>
+</li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="add-book-container">
+                <div class="page-header">
+                    <h1>Edit Book</h1>
+                    <p>Update the details for this literary work</p>
+                </div>
+
+                <div class="form-container">
+                    <div id="messages" class="messages"></div>
+                    
+                    <form id="editBookForm">
+                        <div class="form-group">
+                            <label>Book Title *</label>
+                            <input type="text" id="bookTitle" placeholder="Enter book title" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Author/Editor *</label>
+                            <input type="text" id="bookAuthor" placeholder="Enter author or editor name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Book Cover Image URL (Optional)</label>
+                            <input type="text" id="bookCoverUrl" placeholder="Paste image link here (e.g. https://site.com/image.jpg)">
+                            <div id="currentPhotoPreview"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category (Optional)</label>
+                            <select id="bookCategory">
+                                <option value="">Select a category</option>
+                                <option value="poetry">Poetry</option>
+                                <option value="novel">Novel</option>
+                                <option value="short-story">Short Story</option>
+                                <option value="essay">Essay</option>
+                                <option value="drama">Drama</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Publication Year (Optional)</label>
+                            <input type="number" id="bookYear" placeholder="e.g., 2024">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Number of Pages (Optional)</label>
+                            <input type="number" id="bookPages" placeholder="e.g., 200">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Price (Optional)</label>
+                            <input type="number" id="bookPrice" placeholder="e.g., 250">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>ISBN (Optional)</label>
+                            <input type="text" id="bookISBN" placeholder="ISBN number">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Language (Optional)</label>
+                            <select id="bookLanguage">
+                                <option value="">Select a language</option>
+                                <option value="bengali">Bengali</option>
+                                <option value="english">English</option>
+                                <option value="hindi">Hindi</option>
+                                <option value="urdu">Urdu</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Publisher (Optional)</label>
+                            <input type="text" id="bookPublisher" placeholder="Enter publisher name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description (Optional)</label>
+                            <textarea id="bookDescription" placeholder="Enter book description"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Content (Optional)</label>
+                            <textarea id="bookContent" placeholder="Enter book content"></textarea>
+                        </div>
+
+                        <div class="form-group" style="background:#f9f9f9; padding: 20px; border-radius: 8px;">
+    <label style="font-size: 16px; margin-bottom:15px;">Book Media & Files</label>
+
+    <div class="photo-section">
+        <h4>Main Cover Photo</h4>
+        <div id="mainCoverPreviewContainer"></div> <div class="photo-upload" onclick="triggerUpload('main')">
+            <i class="fas fa-cloud-upload-alt" style="font-size: 40px; margin-bottom: 10px;"></i>
+            <p id="mainStatus">Click to change main cover</p>
+        </div>
+    </div>
+    
+    <div class="photo-section">
+        <h4>Additional Photos Gallery</h4>
+        <div id="additionalPhotosPreviewContainer"></div>
+        
+        <button type="button" onclick="clearExistingPhotos()" class="btn-sm" style="background:#dc3545; color:white; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; width: 100%; margin-top:10px;">
+            <i class="fas fa-trash"></i> Clear All Gallery Photos
+        </button>
+    </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary" id="saveBtn"><i class="fas fa-save"></i> Update Book</button>
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='books.html'">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        window.toggleMobileMenu = function() {
+            document.getElementById('adminSidebar').classList.toggle('active');
+        };
+
+        function showMessage(message, type = 'success') {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = `<div class="message ${type}"><i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> <span>${message}</span></div>`;
+            setTimeout(() => { messagesDiv.innerHTML = ''; }, 5000);
+        }
+    </script>
+
+    <script type="module">
+    // Add this at the start of your module script
+    setTimeout(() => {
+        const loader = document.getElementById('loader-wrapper');
+        if (loader && loader.style.display !== 'none') {
+            console.warn("Loader forced to hide after timeout.");
+            loader.style.display = 'none';
+        }
+    }, 5000); // 5 seconds safety net
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // --- FIREBASE CONFIG ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+        authDomain: "sahitya-mela.firebaseapp.com",
+        projectId: "sahitya-mela",
+        storageBucket: "sahitya-mela.firebasestorage.app",
+        messagingSenderId: "283544938564",
+        appId: "1:283544938564:web:b9bba32cca9e52e6aab411",
+        databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app);
+    const auth = getAuth(app);
+
+    // Check for Global Variable Errors
+    let uploadedPhotos = { all: {}, mainCover: "" };
+
+    window.logout = () => {
+        signOut(auth).then(() => { window.location.href = "login.html"; });
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookId = urlParams.get('id');
+    let currentBookData = {};
+
+    // 1. LOAD THE EXISTING DATA
+    if (bookId) {
+        const bookRef = ref(database, 'books/' + bookId);
+        get(bookRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                currentBookData = snapshot.val();
+                fillForm(currentBookData);
+            }
+        });
+    }
+
+    // Trigger for Main Cover
+    window.triggerUpload = (type) => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                if (type === 'main') {
+                    uploadedPhotos.mainCover = event.target.result;
+                    document.getElementById('mainCoverPreviewContainer').innerHTML = `<img src="${event.target.result}" style="width:100px; border-radius:5px;">`;
+                } else {
+                    const id = 'extra_' + Date.now();
+                    uploadedPhotos.all[id] = event.target.result;
+                    renderExtraPhotos();
+                }
+            };
+            reader.readAsDataURL(file);
+        };
+        input.click();
+    };
+
+    function renderExtraPhotos() {
+    const container = document.getElementById('additionalPhotosPreviewContainer');
+    container.innerHTML = ''; // Reset
+    
+    // 1. Show all currently uploaded/existing photos
+    Object.keys(uploadedPhotos.all).forEach(key => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'thumb-container';
+        wrapper.style.cssText = "position:relative; width:100px; height:100px;";
+        
+        wrapper.innerHTML = `
+            <img src="${uploadedPhotos.all[key]}">
+            <div onclick="removeSinglePhoto('${key}')" style="position:absolute; top:-8px; right:-8px; background:#ff4444; color:white; border-radius:50%; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; border:2px solid white; font-size:12px; z-index:10;">
+                <i class="fas fa-times"></i>
+            </div>
+        `;
+        container.appendChild(wrapper);
+    });
+
+    // 2. ALWAYS add the "Plus" slot at the end to add more
+    const addSlot = document.createElement('div');
+    addSlot.className = 'photo-slot';
+    addSlot.onclick = () => triggerUpload('extra');
+    addSlot.innerHTML = `
+        <i class="fas fa-plus"></i>
+        <span>Add Photo</span>
+    `;
+    container.appendChild(addSlot);
+}
+
+window.removeSinglePhoto = (key) => {
+    delete uploadedPhotos.all[key];
+    renderExtraPhotos();
+};
+
+    window.clearExistingPhotos = () => {
+        if(confirm("Clear all photos?")) {
+            uploadedPhotos.all = {};
+            uploadedPhotos.mainCover = "";
+            document.getElementById('additionalPhotosPreviewContainer').innerHTML = "";
+            document.getElementById('mainCoverPreviewContainer').innerHTML = "";
+        }
+    };
+
+    function fillForm(book) {
+    try {
+        // Standard fields
+        if(document.getElementById('bookTitle')) document.getElementById('bookTitle').value = book.title || '';
+        if(document.getElementById('bookAuthor')) document.getElementById('bookAuthor').value = book.author || '';
+        if(document.getElementById('bookContent')) document.getElementById('bookContent').value = book.content || '';
+        if(document.getElementById('bookCategory') && book.category) document.getElementById('bookCategory').value = book.category;
+        if(document.getElementById('bookYear') && book.year) document.getElementById('bookYear').value = book.year;
+        if(document.getElementById('bookPages') && book.pages) document.getElementById('bookPages').value = book.pages;
+        if(document.getElementById('bookPrice') && book.price) document.getElementById('bookPrice').value = book.price;
+        if(document.getElementById('bookISBN') && book.isbn) document.getElementById('bookISBN').value = book.isbn;
+        if(document.getElementById('bookLanguage') && book.language) document.getElementById('bookLanguage').value = book.language;
+        if(document.getElementById('bookPublisher') && book.publisher) document.getElementById('bookPublisher').value = book.publisher;
+        if(document.getElementById('bookDescription') && book.description) document.getElementById('bookDescription').value = book.description;
+
+        // Load existing photos into our working variable
+        if (book.photos) {
+            uploadedPhotos.all = book.photos; 
+        }
+
+        if (book.cover) {
+            uploadedPhotos.mainCover = book.cover;
+            document.getElementById('mainCoverPreviewContainer').innerHTML = 
+                `<img src="${book.cover}" style="width:120px; border-radius:8px; border: 2px solid #8B0000; margin-bottom:10px;">`;
+        }
+
+        renderExtraPhotos(); // Draw the grid
+        
+        if(document.getElementById('loader-wrapper')) 
+            document.getElementById('loader-wrapper').style.display = 'none';
+
+    } catch (err) {
+        console.error("Error filling form:", err);
+        if(document.getElementById('loader-wrapper')) document.getElementById('loader-wrapper').style.display = 'none';
+    }
+}
+
+window.clearMainCover = () => {
+    uploadedPhotos.mainCover = "";
+    document.getElementById('mainCoverPreviewContainer').innerHTML = "";
+    document.getElementById('mainStatus').innerText = "Click to upload main cover image";
+};
+
+    // 2. CLEAR PREVIOUS FILES LOGIC
+    window.clearField = (type) => {
+        if (type === 'photo') {
+            currentBookData.cover = "";
+            currentBookData.photos = {};
+            document.getElementById('currentPhotoPreview').innerHTML = "<p style='color:orange;'>Photo marked for removal. Upload a new one below.</p>";
+        }
+    };
+
+    // --- UPDATED SAVE LOGIC ---
+    document.getElementById('editBookForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Prepare Data
+        const updatedData = {
+            title: document.getElementById('bookTitle').value,
+            author: document.getElementById('bookAuthor').value,
+            category: document.getElementById('bookCategory').value,
+            year: document.getElementById('bookYear').value,
+            pages: document.getElementById('bookPages').value,
+            price: document.getElementById('bookPrice').value,
+            isbn: document.getElementById('bookISBN').value,
+            language: document.getElementById('bookLanguage').value,
+            publisher: document.getElementById('bookPublisher').value,
+            description: document.getElementById('bookDescription').value,
+            content: document.getElementById('bookContent').value,
+            
+            // Files
+            cover: uploadedPhotos.mainCover || currentBookData.cover || "",
+            photos: (Object.keys(uploadedPhotos.all).length > 0) ? uploadedPhotos.all : (currentBookData.photos || {}),
+            
+            lastEdited: Date.now()
+        };
+
+        try {
+            await update(ref(database, 'books/' + bookId), updatedData);
+            alert("✅ Book Successfully Updated!");
+            window.location.href = "books.html";
+        } catch (error) {
+            console.error(error);
+            alert("❌ Update failed: " + error.message);
+        }
+    });
+</script>
+</body>
+</html>

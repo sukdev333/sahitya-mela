@@ -1,0 +1,79 @@
+/* Performance fixes to eliminate flickering */
+
+/* Force hardware acceleration for all animated elements */
+.book-card,
+.category-card,
+.btn,
+.nav-link,
+.social-links a,
+.fade-in,
+.slide-in-left,
+.slide-in-right {
+    will-change: transform, opacity;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Prevent layout shifts */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Ensure fixed Admin elements stay above hardware-accelerated cards */
+.admin-header {
+    z-index: 9999 !important;
+    transform: none !important; /* Fixed headers hate translateZ */
+}
+
+.admin-sidebar {
+    z-index: 9998 !important;
+}
+
+/* Only animate background and color to save battery/performance */
+body, .admin-main, .stat-card, input, textarea {
+    transition: background-color 0.3s ease, color 0.3s ease !important;
+    will-change: background-color, color;
+}
+
+/* Loading state styling */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    width: 100%;
+    grid-column: 1 / -1; /* Covers the whole grid width */
+}
+
+/* Reduce paint operations */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize transitions */
+.book-card,
+.category-card,
+.btn {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Remove any conflicting animations on page load */
+.no-animation * {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+}

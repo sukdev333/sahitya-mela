@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // Check for saved theme immediately before the page renders
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    </script>
+    <title>Admin Login - SAHITYA MELA</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/admin-auth.js"></script>
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-responsive.css">
+    <link rel="stylesheet" href="../assets/css/responsive.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="admin-body">
+    <div class="admin-login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <img src="../assets/images/logo.png" alt="SAHITYA MELA" class="logo-img">
+                    <h1>Admin Login</h1>
+                    <p>SAHITYA MELA Admin Panel</p>
+                </div>
+            </div>
+            
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="username" name="username" required placeholder="Enter your username">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                            <i class="fas fa-eye" id="passwordIcon"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe">
+                        <span class="checkmark"></span>
+                        Remember me
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Login
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <a href="../index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Main Site
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/admin-login.js"></script>
+    <script type="module">
+        // Add these imports at the very top of your script
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Your Firebase Config (Keep this exactly as it is)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+            authDomain: "sahitya-mela.firebaseapp.com",
+            projectId: "sahitya-mela",
+            storageBucket: "sahitya-mela.firebasestorage.app",
+            messagingSenderId: "283544938564",
+            appId: "1:283544938564:web:b9bba32cca9e52e6aab411",
+            databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+        };
+
+        // Initialize
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Handle the Login Form
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get values from your input fields
+            const email = document.getElementById('username').value; 
+            const password = document.getElementById('password').value;
+
+            // Show a loading message if you have one
+            console.log("Attempting cloud login...");
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // SUCCESS! 
+                    // We save a 'session' so other pages know you are logged in
+                    localStorage.setItem('adminUser', 'true'); 
+                    
+                    // Redirect to the dashboard
+                    window.location.href = "dashboard.html"; 
+                })
+                .catch((error) => {
+                    // If the password or email is wrong
+                    console.error("Login Error:", error.code);
+                    alert("Login Failed: Please check your Email and Password.");
+                });
+        });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('passwordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Dark Mode Toggle Function
+        window.toggleDarkMode = function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', targetTheme);
+            localStorage.setItem('theme', targetTheme); // Saves for next visit
+            
+            // Update the icon
+            const icon = document.querySelector('#darkModeToggle i');
+            if (icon) {
+                icon.className = targetTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            }
+        };
+    </script>
+</body>
+</html>

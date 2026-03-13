@@ -1,0 +1,250 @@
+/* Dark Mode Styles for SAHITYA MELA */
+
+:root {
+    /* Light mode colors (default) */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f9fa;
+    --bg-tertiary: #f5f5dc;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --text-muted: #999999;
+    --border-color: #e0e0e0;
+    --card-bg: #ffffff;
+    --header-bg: #ffffff;
+    --footer-bg: #2c3e50;
+    --primary-color: #8B0000;
+    --accent-color: #CD853F;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --shadow-hover: rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode colors */
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-tertiary: #3a3a3a;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    --text-muted: #999999;
+    --border-color: #404040;
+    --card-bg: #2d2d2d;
+    --header-bg: #252525;
+    --footer-bg: #1a1a1a;
+    --primary-color: #8B0000;
+    --accent-color: #CD853F;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --shadow-hover: rgba(0, 0, 0, 0.5);
+    --light-gray: #2d2d2d;
+    --white: #1a1a1a;
+    --text-color: #ffffff;
+    --text-dark: #ffffff;
+    --text-light: #cccccc;
+    --secondary-color: #333333;
+}
+
+/* Admin Panel Dark Mode Styles */
+[data-theme="dark"] .admin-sidebar {
+    background-color: #252525; /* Slightly darker than secondary */
+    border-right: 1px solid #444;
+}
+
+[data-theme="dark"] .admin-menu a:hover {
+    background-color: #333;
+}
+
+[data-theme="dark"] .admin-header {
+    background-color: #252525;
+    border-bottom: 1px solid #444;
+}
+
+[data-theme="dark"] .admin-main {
+    background-color: #1a1a1a;
+}
+
+[data-theme="dark"] .admin-menu a {
+    color: #ffffff;
+    border-bottom: 1px solid #444;
+}
+
+[data-theme="dark"] .admin-menu a.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+[data-theme="dark"] .mobile-menu-toggle {
+    background-color: #ff6b6b; /* Bright red for better visibility in dark mode */
+    color: #ffffff;
+}
+
+/* Apply dark mode styles */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.footer {
+    background-color: var(--footer-bg);
+}
+
+.card, .book-card, .message-card, .contact-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+.card:hover, .book-card:hover {
+    box-shadow: 0 4px 20px var(--shadow-hover);
+}
+
+/* Form elements */
+input, textarea, select {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-color);
+    background-color: var(--bg-secondary);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+}
+
+.btn-secondary {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+/* Navigation */
+.nav-link {
+    color: var(--text-primary);
+}
+
+.nav-link:hover {
+    color: var(--primary-color);
+}
+
+/* Dark mode toggle button in navigation */
+.dark-mode-toggle {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 18px;
+    padding: 10px;
+    margin-left: 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark-mode-toggle:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+/* Admin panel dark mode */
+.admin-header {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-sidebar {
+    background-color: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+}
+
+.admin-main {
+    background-color: var(--bg-primary);
+}
+
+/* Smooth transitions for all elements */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Dark mode specific adjustments */
+[data-theme="dark"] .hero {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+}
+
+[data-theme="dark"] .section {
+    background-color: var(--bg-primary);
+}
+
+[data-theme="dark"] .page-header {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+}
+
+[data-theme="dark"] .page-header h1 {
+    color: var(--primary-color);
+}
+
+[data-theme="dark"] .page-header p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] img {
+    opacity: 0.9;
+}
+
+[data-theme="dark"] .logo-img {
+    filter: brightness(1.2);
+}
+
+/* Ensure text readability in dark mode */
+[data-theme="dark"] h1, 
+[data-theme="dark"] h2, 
+[data-theme="dark"] h3, 
+[data-theme="dark"] h4, 
+[data-theme="dark"] h5, 
+[data-theme="dark"] h6 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] p {
+    color: var(--text-secondary);
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--text-muted);
+}
+
+/* Dark mode notification styles */
+[data-theme="dark"] .notification {
+    background: var(--card-bg);
+    color: var(--text-primary);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .notification-close {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .notification-close:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--text-primary);
+}

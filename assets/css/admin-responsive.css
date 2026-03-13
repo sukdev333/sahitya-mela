@@ -1,0 +1,1123 @@
+/* Admin Panel Responsive Design */
+
+/* Mobile First Approach for Admin Panel */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex !important; /* Force visibility on mobile */
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+        font-size: 20px;
+        visibility: visible !important;
+    }
+    
+    /* Ensure the sidebar slides in correctly when 'active' class is added by JS */
+    .admin-sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .admin-sidebar.active {
+        transform: translateX(0);
+    }
+    
+    /* Admin Login Mobile Styles */
+    .admin-login-container {
+        padding: 10px;
+        min-height: 100vh;
+    }
+    
+    .login-card {
+        padding: 2rem 1.5rem;
+        margin: 10px;
+        border-radius: 15px;
+        max-width: 100%;
+        width: calc(100% - 20px);
+    }
+    
+    .login-header .logo-img {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .login-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .login-header p {
+        font-size: 1rem;
+    }
+}
+
+/* Ensure the hamburger button is only visible on mobile/tablets */
+@media (max-width: 1024px) {
+    .mobile-menu-toggle {
+        display: block !important;
+        visibility: visible !important;
+        cursor: pointer;
+    }
+}
+
+@media (min-width: 1025px) {
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+}
+
+/* Optimized Cloud Message Cards */
+.message-card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-left: 5px solid #ccc;
+    transition: all 0.3s ease;
+}
+
+.message-card.unread {
+    border-left-color: #8B0000;
+    background-color: #fffafa;
+}
+
+.message-card.read {
+    border-left-color: #28a745;
+    opacity: 0.8;
+}
+
+@media (max-width: 480px) {
+    .message-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+    }
+    .message-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
+}
+
+/* Admin Dashboard Mobile */
+@media (max-width: 768px) {
+    .admin-container {
+        padding: 10px !important;
+    }
+    
+    .admin-header {
+        padding: 15px 10px !important;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .admin-nav {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    
+    .admin-nav .nav-link {
+        padding: 12px 15px;
+        text-align: center;
+        border-radius: 8px;
+        background: var(--bg-secondary);
+        margin: 2px 0;
+    }
+    
+    /* Admin Forms Mobile */
+    .admin-form {
+        padding: 20px 15px !important;
+        margin: 10px 0;
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        font-size: 1rem;
+        margin-bottom: 8px;
+        display: block;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100% !important;
+        padding: 12px 15px !important;
+        font-size: 16px !important; /* Prevent zoom on iOS */
+        border-radius: 8px;
+        border: 2px solid var(--border-color);
+        box-sizing: border-box;
+    }
+    
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+    
+    /* Admin Buttons Mobile */
+    .btn {
+        width: 100% !important;
+        padding: 15px 20px !important;
+        font-size: 1rem !important;
+        margin: 10px 0 !important;
+        border-radius: 8px;
+        touch-action: manipulation;
+    }
+    
+    .form-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .form-actions .btn {
+        width: 100% !important;
+        margin: 5px 0 !important;
+    }
+    
+    /* Admin Tables Mobile */
+    .admin-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 10px 0;
+    }
+    
+    .admin-table {
+        min-width: 600px;
+        font-size: 14px;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 8px 12px;
+        white-space: nowrap;
+    }
+    
+    /* Admin Cards Mobile */
+    .admin-card {
+        margin: 10px 0 !important;
+        padding: 15px !important;
+        border-radius: 10px;
+    }
+    
+    .admin-stats {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+    
+    .stat-card {
+        padding: 20px 15px !important;
+        text-align: center;
+    }
+    
+    /* File Upload Mobile */
+    .file-upload-area {
+        padding: 30px 15px !important;
+        margin: 15px 0;
+        border-radius: 10px;
+    }
+    
+    .file-upload-text {
+        font-size: 14px;
+    }
+    
+    /* Mobile Navigation */
+    .admin-mobile-nav {
+        display: block;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        border-top: 1px solid var(--border-color);
+        padding: 10px;
+        z-index: 1000;
+    }
+    
+    .admin-mobile-nav .nav-items {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    
+    .admin-mobile-nav .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px;
+        text-decoration: none;
+        color: var(--text-light);
+        font-size: 12px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .admin-mobile-nav .nav-item.active {
+        color: var(--primary-color);
+        background: var(--secondary-color);
+    }
+    
+    .admin-mobile-nav .nav-item i {
+        font-size: 18px;
+        margin-bottom: 4px;
+    }
+    
+    /* Adjust main content for mobile nav */
+    .admin-main {
+        padding-bottom: 80px !important;
+    }
+}
+
+/* Tablet Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    
+    .admin-container {
+        padding: 20px;
+    }
+    
+    .login-card {
+        padding: 2.5rem;
+        max-width: 500px;
+    }
+    
+    .admin-form {
+        padding: 30px;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 12px 15px;
+        font-size: 16px;
+    }
+    
+    .admin-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .admin-table {
+        font-size: 15px;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    
+    .admin-mobile-nav {
+        display: none;
+    }
+}
+
+/* Desktop Styles */
+@media (min-width: 1025px) {
+    
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 30px;
+    }
+    
+    .admin-form {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 40px;
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    .admin-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 25px;
+    }
+    
+    .admin-mobile-nav {
+        display: none;
+    }
+    
+    .admin-sidebar {
+        width: 250px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        background: var(--white);
+        border-right: 1px solid var(--border-color);
+        padding: 20px;
+        overflow-y: auto;
+    }
+    
+    .admin-main-content {
+        margin-left: 250px;
+        min-height: 100vh;
+    }
+}
+
+/* Dark Mode Support for Admin */
+[data-theme="dark"] .admin-mobile-nav {
+    background: var(--bg-primary);
+    border-top-color: var(--border-color);
+}
+
+[data-theme="dark"] .admin-nav .nav-link {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .admin-mobile-nav .nav-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Touch Improvements */
+@media (hover: none) and (pointer: coarse) {
+    .btn:hover {
+        transform: none;
+    }
+    
+    .admin-nav .nav-link:hover {
+        transform: none;
+    }
+    
+    .admin-table tr:hover {
+        background: transparent;
+    }
+}
+
+/* Landscape Phone */
+@media (max-width: 768px) and (orientation: landscape) {
+    .admin-login-container {
+        padding: 20px 40px;
+    }
+    
+    .login-card {
+        max-width: 600px;
+        padding: 2rem 3rem;
+    }
+    
+    .admin-form {
+        padding: 20px 30px;
+    }
+}
+
+/* Print Styles for Admin */
+@media print {
+    .admin-nav,
+    .admin-mobile-nav,
+    .btn,
+    .form-actions {
+        display: none !important;
+    }
+    
+    .admin-main {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .admin-table {
+        font-size: 12px;
+    }
+}
+
+/* ========================================
+   COMPREHENSIVE ADMIN RESPONSIVE DESIGN
+   ======================================== */
+
+/* Base Admin Responsive Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+    word-wrap: break-word;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+/* Extra Large Screens (1400px and above) */
+@media (min-width: 1400px) {
+    .admin-container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .admin-sidebar {
+        width: 300px;
+    }
+    
+    .admin-content {
+        margin-left: 300px;
+        padding: 30px;
+    }
+    
+    .admin-header {
+        padding: 20px 30px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 25px;
+    }
+    
+    .book-card {
+        padding: 25px;
+    }
+    
+    .form-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .admin-table {
+        font-size: 16px;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 15px;
+    }
+}
+
+/* Large Screens (1200px - 1399px) */
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .admin-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .admin-sidebar {
+        width: 280px;
+    }
+    
+    .admin-content {
+        margin-left: 280px;
+        padding: 25px;
+    }
+    
+    .admin-header {
+        padding: 18px 25px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    
+    .book-card {
+        padding: 20px;
+    }
+    
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .admin-table {
+        font-size: 15px;
+    }
+}
+
+/* Medium Large Screens (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .admin-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 15px;
+    }
+    
+    .admin-sidebar {
+        width: 250px;
+    }
+    
+    .admin-content {
+        margin-left: 250px;
+        padding: 20px;
+    }
+    
+    .admin-header {
+        padding: 15px 20px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 18px;
+    }
+    
+    .book-card {
+        padding: 18px;
+    }
+    
+    .form-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+    
+    .admin-table {
+        font-size: 14px;
+    }
+}
+
+/* Medium Screens (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .admin-container {
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    .admin-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        order: 2;
+        margin-top: 20px;
+    }
+    
+    .admin-content {
+        margin-left: 0;
+        order: 1;
+        padding: 15px;
+    }
+    
+    .admin-header {
+        padding: 15px;
+        flex-direction: row;
+    }
+    
+    .admin-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+    }
+    
+    .book-card {
+        padding: 15px;
+    }
+    
+    .book-cover {
+        width: 120px;
+        height: 160px;
+    }
+    
+    .form-container {
+        padding: 15px;
+    }
+    
+    .admin-table {
+        font-size: 13px;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 10px;
+    }
+    
+    .table-actions {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .table-actions .btn {
+        width: 100%;
+        font-size: 12px;
+    }
+}
+
+/* Small Tablets (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .admin-container {
+        padding: 10px;
+    }
+    
+    .admin-header {
+        padding: 12px 10px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .admin-nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .admin-nav .btn {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+        text-align: center;
+    }
+    
+    .stat-card h3 {
+        font-size: 1.8rem;
+    }
+    
+    .stat-card p {
+        font-size: 0.9rem;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+    }
+    
+    .book-card {
+        padding: 12px;
+        text-align: center;
+    }
+    
+    .book-cover {
+        width: 100px;
+        height: 140px;
+        margin: 0 auto 10px;
+    }
+    
+    .book-info h3 {
+        font-size: 1rem;
+    }
+    
+    .book-info p {
+        font-size: 0.8rem;
+    }
+    
+    .book-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .book-actions .btn {
+        width: 100%;
+    }
+    
+    .form-container {
+        padding: 12px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-control {
+        padding: 12px;
+        font-size: 15px;
+    }
+    
+    .btn {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+    
+    .admin-table {
+        font-size: 12px;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 8px;
+    }
+    
+    .table-actions .btn {
+        font-size: 11px;
+        padding: 6px;
+    }
+}
+
+/* Mobile Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+    .admin-container {
+        padding: 8px;
+    }
+    
+    .admin-header {
+        padding: 10px 8px;
+    }
+    
+    .admin-header .logo {
+        gap: 8px;
+    }
+    
+    .admin-header .logo-img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .admin-header .logo span {
+        font-size: 14px;
+    }
+    
+    .admin-nav {
+        gap: 6px;
+    }
+    
+    .admin-nav .btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-card h3 {
+        font-size: 1.6rem;
+    }
+    
+    .stat-card p {
+        font-size: 0.85rem;
+    }
+    
+    .books-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+    }
+    
+    .book-card {
+        padding: 10px;
+    }
+    
+    .book-cover {
+        width: 80px;
+        height: 110px;
+    }
+    
+    .book-info h3 {
+        font-size: 0.9rem;
+    }
+    
+    .book-info p {
+        font-size: 0.75rem;
+    }
+    
+    .form-container {
+        padding: 10px;
+    }
+    
+    .form-group {
+        margin-bottom: 12px;
+    }
+    
+    .form-control {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .btn {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .admin-table {
+        font-size: 11px;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 6px;
+    }
+    
+    .table-actions {
+        flex-direction: column;
+        gap: 3px;
+    }
+    
+    .table-actions .btn {
+        font-size: 10px;
+        padding: 5px;
+    }
+}
+
+/* Small Mobile Phones (320px - 479px) */
+@media (max-width: 479px) {
+    .admin-container {
+        padding: 5px;
+    }
+    
+    .admin-header {
+        padding: 8px 5px;
+    }
+    
+    .admin-header .logo-img {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .admin-header .logo span {
+        font-size: 12px;
+    }
+    
+    .admin-nav {
+        gap: 4px;
+    }
+    
+    .admin-nav .btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .stat-card {
+        padding: 10px;
+        text-align: center;
+    }
+    
+    .stat-card h3 {
+        font-size: 1.4rem;
+    }
+    
+    .stat-card p {
+        font-size: 0.8rem;
+    }
+    
+    .books-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .book-card {
+        padding: 8px;
+        text-align: center;
+    }
+    
+    .book-cover {
+        width: 70px;
+        height: 95px;
+    }
+    
+    .book-info h3 {
+        font-size: 0.85rem;
+    }
+    
+    .book-info p {
+        font-size: 0.7rem;
+    }
+    
+    .form-container {
+        padding: 8px;
+    }
+    
+    .form-group {
+        margin-bottom: 10px;
+    }
+    
+    .form-control {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .form-group label {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+    
+    .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .admin-table {
+        font-size: 10px;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 4px;
+    }
+    
+    .table-actions .btn {
+        font-size: 9px;
+        padding: 4px;
+    }
+    
+    .page-header {
+        padding: 10px 0;
+    }
+    
+    .page-header h1 {
+        font-size: 1.2rem;
+    }
+    
+    .page-header p {
+        font-size: 0.8rem;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .search-bar input {
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    .filter-options {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .filter-options select {
+        width: 100%;
+        font-size: 14px;
+    }
+    
+    .message-item {
+        padding: 10px;
+    }
+    
+    .message-content {
+        font-size: 12px;
+    }
+    
+    .message-meta {
+        font-size: 10px;
+    }
+}
+
+/* ========================================
+   ADMIN RESPONSIVE UTILITIES
+   ======================================== */
+
+.admin-responsive-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+
+.admin-responsive-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.admin-responsive-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-responsive-img {
+    max-width: 100%;
+    height: auto;
+}
+
+.admin-responsive-text {
+    font-size: clamp(0.8rem, 2vw, 1rem);
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+.admin-responsive-title {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+    line-height: 1.2;
+    word-wrap: break-word;
+}
+
+/* Prevent overflow */
+.admin-no-overflow {
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+.admin-text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .admin-container * {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+    }
+    
+    .admin-container img {
+        content-visibility: auto;
+    }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+    .admin-sidebar,
+    .admin-nav,
+    .btn {
+        display: none !important;
+    }
+    
+    .admin-content {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .admin-container {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}

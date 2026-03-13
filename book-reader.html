@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📖 BOOK READER - SAHITYA MELA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        
+        /* Header Section */
+        .book-info { background: #8B0000; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; overflow: hidden; display: flex; align-items: center; gap: 20px; }
+        .book-cover { width: 120px; height: 160px; object-fit: cover; border-radius: 5px; background: white; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .book-details { flex: 1; overflow: hidden; }
+        .book-details h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
+        
+        /* Navigation */
+        .nav-btn { background: #8B0000; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; margin-right: 5px; font-weight: bold; }
+        
+        /* Single Page Content Area */
+        .content-area { background: white; border-radius: 8px; border: 1px solid #eee; margin-top: 20px; }
+        .text-content { padding: 30px; line-height: 1.8; white-space: pre-wrap; font-size: 18px; color: #333; }
+        
+        /* Full Size Images */
+        .images-content { padding: 0 30px 30px 30px; display: flex; flex-direction: column; gap: 30px; }
+        .images-content img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 15px rgba(0,0,0,0.1); border: 1px solid #eee; }
+        
+        /* Loader */
+        #loader-wrapper { position: fixed; inset: 0; background: white; display: flex; justify-content: center; align-items: center; z-index: 2000; flex-direction: column; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #8B0000; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .book-info { flex-direction: column; text-align: center; }
+            .book-cover { margin: 0 auto; }
+            .text-content, .images-content { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader-wrapper">
+        <div class="spinner"></div>
+        <p>সাহিত্য মেলা লোড হচ্ছে...</p>
+    </div>
+
+    <div class="container">
+        <nav style="margin-bottom: 20px;">
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+            <a href="library.html" class="nav-btn"><i class="fas fa-book"></i> Library</a>
+        </nav>
+
+        <div class="book-info">
+            <img id="bookCover" src="assets/images/default-book.svg" alt="Book Cover" class="book-cover">
+            <div class="book-details">
+                <h1 id="bookTitle">Loading...</h1>
+                <p id="bookAuthor">Author: Loading...</p>
+                <p id="bookDescription" style="opacity: 0.9; font-size: 14px;">Description: Loading...</p>
+            </div>
+        </div>
+        
+        <div class="content-area">
+            <div id="textContent" class="text-content">
+                Loading book content...
+            </div>
+
+            <div id="imagesContent" class="images-content">
+                </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCftWFc6WvMbaY_iwF6DUawi7Qvf0SRKYc",
+            authDomain: "sahitya-mela.firebaseapp.com",
+            projectId: "sahitya-mela",
+            storageBucket: "sahitya-mela.firebasestorage.app",
+            messagingSenderId: "283544938564",
+            appId: "1:283544938564:web:b9bba32cca9e52e6aab411",
+            databaseURL: "https://sahitya-mela-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const bookId = urlParams.get('id');
+
+        if (!bookId || bookId === "null") {
+            document.body.innerHTML = `<div style="text-align:center;margin-top:50px;">
+                <h2>ID Missing</h2>
+                <p>The library link is broken. Please refresh the library and try again.</p>
+                <a href="library.html" class="nav-btn">Back to Library</a>
+            </div>`;
+        } else {
+            const bookRef = ref(database, 'books/' + bookId);
+            
+            get(bookRef).then((snapshot) => {
+                if (snapshot.exists()) {
+                    renderBook(snapshot.val());
+                } else {
+                    alert("This book has been deleted.");
+                    window.location.href = 'library.html';
+                }
+            }).catch(error => {
+                console.error("Error:", error);
+                alert("Connection error.");
+            });
+        }
+
+        function renderBook(book) {
+            // 1. Header Details
+            document.getElementById('bookTitle').innerText = book.title || 'Untitled';
+            document.getElementById('bookAuthor').innerText = "By " + (book.author || 'Unknown');
+            document.getElementById('bookDescription').innerText = book.description || '';
+            
+            const finalImg = book.cover || (book.photos && book.photos.mainCover) || 'assets/images/default-book.svg';
+            document.getElementById('bookCover').src = finalImg;
+
+            // 2. Text Content
+            document.getElementById('textContent').innerText = book.content || '';
+
+            // 3. Full Size Images (Stacked vertically)
+            const imagesContainer = document.getElementById('imagesContent');
+            if (book.photos) {
+                const images = Object.values(book.photos);
+                // Create an image tag for every photo and stack them
+                imagesContainer.innerHTML = images.map(imgSrc => `
+                    <img src="${imgSrc}" loading="lazy" alt="Book Page">
+                `).join('');
+            } else {
+                imagesContainer.innerHTML = '';
+            }
+
+            // Hide Loader
+            document.getElementById('loader-wrapper').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
